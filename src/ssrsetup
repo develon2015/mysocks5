@@ -1,0 +1,26 @@
+#!/bin/bash
+
+sudo iptables -t nat -F    # 清空nat表规则
+sudo iptables -t nat -N SSR    # 新建SSR链
+sudo iptables -t nat -A SSR -j REDIRECT -p tcp --to-ports 12345 -m comment --comment 'redsocks全局SSR代理'
+sudo iptables -t nat -A OUTPUT -j SSR -p tcp -m comment --comment '跳转到redsocks全局SSR代理'
+
+# 局域网放行
+
+Chain_SSR="OUTPUT"
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 0.0.0.0/8
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 10.0.0.0/8
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 100.64.0.0/10
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 127.0.0.0/8
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 169.254.0.0/16
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 172.16.0.0/12
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 192.168.0.0/16
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 198.18.0.0/15
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 224.0.0.0/4
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment '局域网放行' -d 240.0.0.0/4
+sudo iptables -t nat -I $Chain_SSR -j RETURN -m comment --comment 'socks5代理服务器放行' -d 47.95.255.46
+
+sudo iptables -t nat -nvL --line-number
+
+echo "配置完成"
+

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+#sudo iptables -t nat -nvL SSR --line-number
+sudo iptables -t nat -nvL --line-number
+

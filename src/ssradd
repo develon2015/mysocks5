@@ -1,0 +1,4 @@
+#!/bin/bash
+
+read -p 请输入要设置白名单的域名： release_domain && sudo iptables -t nat -I SSR -j RETURN -m comment --comment '白名单域名：'"$release_domain" -d $release_domain && sudo iptables -t nat -nvL --line-number
+

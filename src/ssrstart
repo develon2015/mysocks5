@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo iptables -t nat -j RETURN -m comment --comment 临时关闭代理 -D SSR
+
